@@ -1,0 +1,8 @@
+fastapi==0.68.0
+uvicorn==0.15.0
+python-jose[cryptography]==3.3.0
+pyjwt==2.3.0
+passlib
+paho-mqtt==1.5.1  # MQTT client library
+aiobotocore==1.4.0  # Asynchronous AWS SDK for IoT Core (for AWS IoT)
+python-multipart

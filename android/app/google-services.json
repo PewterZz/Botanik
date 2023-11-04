@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "341772231821",
+    "project_id": "botanik-f1b42",
+    "storage_bucket": "botanik-f1b42.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341772231821:android:d14c32bfb8520167a3eec4",
+        "android_client_info": {
+          "package_name": "com.example.botanik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341772231821-isq7umv5u1f99etbsqim2kjnrio959nb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCghCWbKe5S9JVFJilkvK2cO8mfm-bq7mA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341772231821-isq7umv5u1f99etbsqim2kjnrio959nb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
