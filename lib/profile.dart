@@ -2,29 +2,37 @@ import 'package:flutter/material.dart';
 import 'devices.dart';
 
 class Profile extends StatelessWidget {
+  final TextEditingController wifiSSIDController = TextEditingController();
+  final TextEditingController wifiPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('First Page'),
+        title: Text('Profile'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'First Page',
-              style: TextStyle(fontSize: 20),
+            TextFormField(
+              controller: wifiSSIDController,
+              decoration: InputDecoration(
+                labelText: 'WIFI SSID',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.emailAddress,
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Devices()),
-                );
-              },
-              child: Text('Go to Second Page'),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: wifiPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'WIFI Password',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.visiblePassword,
             ),
+            SizedBox(height: 20),
           ],
         ),
       ),

@@ -2,59 +2,99 @@ import 'package:flutter/material.dart';
 import 'profile.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-class Devices extends StatelessWidget {
+class Devices extends StatefulWidget {
+  @override
+  _DeviceState createState() => _DeviceState();
+}
+
+class _DeviceState extends State<Devices> {
+  bool isMoisture = false;
+  bool isHumidity = false;
+  bool isLightOn = false;
+  bool isRelayOn = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('First Page'),
+        title: const Text('Devices'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'First Page',
+            const Text(
+              'Moisture Sensor',
               style: TextStyle(fontSize: 20),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                // check if bluetooth is supported by your hardware
-// Note: The platform is initialized on the first call to any FlutterBluePlus method.
-                if (await FlutterBluePlus.isSupported == false) {
-                  print("Bluetooth not supported by this device");
-                  return;
-                }
-
-// handle bluetooth on & off
-// note: for iOS the initial state is typically BluetoothAdapterState.unknown
-// note: if you have permissions issues you will get stuck at BluetoothAdapterState.unauthorized
-                FlutterBluePlus.adapterState.listen((BluetoothAdapterState state) async {
-                  print(state);
-                  if (state == BluetoothAdapterState.on) {
-                    // usually start scanning, connecting, etc
-                    var subscription = FlutterBluePlus.scanResults.listen((results) {
-                      if (results.isNotEmpty) {
-                        ScanResult r = results.last; // the most recently found device
-                        print('${r.device.remoteId}: "${r.advertisementData.advName}" found!');
-                      }
-                    },
-                        // onError(e) => print(e);
-                  );
-
-// Start scanning
-                  await FlutterBluePlus.startScan();
-
-// Stop scanning
-                  await FlutterBluePlus.stopScan();
-                  } else {
-                    // show an error to the user, etc
-                  }
-                });
-
-              },
-              child: Text('Go to Second Page'),
+            const SizedBox(height: 10),
+            Text(isMoisture.toString(), style: const TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            const Text(
+              'Humidity',
+              style: TextStyle(fontSize: 20),
             ),
+            const SizedBox(height: 10),
+            Text(isHumidity.toString(), style: TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            const Text(
+              'Light',
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 10),
+            ToggleButtons(
+              children: [
+                IconButton(
+                    onPressed: () => {
+                          setState(() {
+                            isLightOn = true;
+                          })
+                        },
+                    icon: const Text("On")),
+                IconButton(
+                    onPressed: () => {
+                          setState(() {
+                            isLightOn = false;
+                          })
+                        },
+                    icon: const Text("Off"))
+              ],
+              isSelected: [true, false],
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Time',
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 10),
+
+            const SizedBox(height: 20),
+            const Text(
+              'Relay',
+              style: TextStyle(fontSize: 20),
+            ),
+            ToggleButtons(
+              children: [
+                IconButton(
+                    onPressed: () => {
+                          setState(() {
+                            isRelayOn = true;
+                          })
+                        },
+                    icon: const Text("On")),
+                IconButton(
+                    onPressed: () => {
+                          setState(() {
+                            isRelayOn = false;
+                          })
+                        },
+                    icon: const Text("Off"))
+              ],
+              isSelected: [true, false],
+            ),
+            // const ToggleButtons(children: children, isSelected: isSelected),
+            const SizedBox(height: 10),
+            const SizedBox(height: 20),
           ],
         ),
       ),

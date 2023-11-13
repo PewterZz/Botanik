@@ -33,7 +33,8 @@ class AuthChecker extends StatelessWidget {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure that Flutter bindings are initialized
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure that Flutter bindings are initialized
 
   await Firebase.initializeApp(); // Initialize Firebase
 
@@ -94,7 +95,8 @@ class _BottomNavPageState extends State<BottomNavPage> {
   void _onBottomNavTapped(int index) {
     setState(() {
       _currentPageIndex = index;
-      _pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
+      _pageController.animateToPage(index,
+          duration: Duration(milliseconds: 300), curve: Curves.ease);
     });
   }
 
