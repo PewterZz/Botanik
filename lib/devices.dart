@@ -1,17 +1,131 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'profile.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class Devices extends StatefulWidget {
+  final BluetoothDevice? device;
+
+  Devices({this.device});
+
   @override
-  _DeviceState createState() => _DeviceState();
+  _DevicesState createState() => _DevicesState();
 }
 
-class _DeviceState extends State<Devices> {
-  bool isMoisture = false;
-  bool isHumidity = false;
-  bool isLightOn = false;
-  bool isRelayOn = false;
+class _DevicesState extends State<Devices> {
+  String? _characteristic;
+
+  double soilMoisture = 0.0;
+  double temperature = 0.0;
+  double humidity = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _initBluetooth();
+  }
+
+  void _initBluetooth() async {
+    if (widget.device == null) {
+      print("Device is null. Please connect to a device first.");
+      return;
+    }
+
+    try {
+      await widget.device!.connect();
+      List<BluetoothService> services = await widget.device!.discoverServices();
+
+      for (BluetoothService service in services) {
+        for (BluetoothCharacteristic characteristic in service.characteristics) {
+          if (characteristic.uuid.toString() == "19b10000-e8f2-537e-4f6c-d104768a1214") {
+            setState(() {
+              _characteristic = characteristic.uuid.toString();
+            });
+
+            await characteristic.setNotifyValue(true);
+            characteristic.onValueReceived.listen((value) {
+              final receivedData = utf8.decode(value);
+              print("Received data: $receivedData");
+              _updateSensorData(receivedData);
+            });
+
+            return;
+          }
+        }
+      }
+
+      if (_characteristic == null) {
+        print("Custom characteristic not found. Check if the device has the required services and characteristics.");
+      }
+    } catch (e) {
+      print("Error initializing Bluetooth: $e");
+    }
+  }
+
+  void _updateSensorData(String receivedData) {
+    final dataLines = receivedData.split('\n'); // Splitting by line breaks
+
+    for (String line in dataLines) {
+      final keyValue = line.split(':');
+      if (keyValue.length == 2) {
+        final key = keyValue[0].trim();
+        final value = double.tryParse(keyValue[1].trim()) ?? 0.0;
+
+        if (key == 'Soil Moisture') {
+          setState(() {
+            soilMoisture = value;
+          });
+        } else if (key == 'Temperature') {
+          setState(() {
+            temperature = value;
+          });
+        } else if (key == 'Humidity') {
+          setState(() {
+            humidity = value;
+          });
+        }
+      }
+    }
+  }
+
+  Future<BluetoothCharacteristic?> _findCharacteristicByUuid(String uuid) async {
+    List<BluetoothService> services = await widget.device!.discoverServices();
+    for (BluetoothService service in services) {
+      for (BluetoothCharacteristic characteristic in service.characteristics) {
+        if (characteristic.uuid.toString() == uuid) {
+          return characteristic;
+        }
+      }
+    }
+    return null;
+  }
+
+  void sendCommandToESP32(String command) async {
+    if (_characteristic == null) {
+      print("Characteristic UUID not set. Please initialize Bluetooth connection first.");
+      return;
+    }
+
+    try {
+      BluetoothCharacteristic? characteristic = await _findCharacteristicByUuid(_characteristic!);
+      if (characteristic == null) {
+        print("Characteristic with UUID $_characteristic not found.");
+        return;
+      }
+
+      final commandBytes = Uint8List.fromList(utf8.encode(command));
+      await characteristic.write(commandBytes);
+      print("Command sent successfully: $command");
+    } catch (e) {
+      print("Error sending command: $e");
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.device?.disconnect();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,73 +142,65 @@ class _DeviceState extends State<Devices> {
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 10),
-            Text(isMoisture.toString(), style: const TextStyle(fontSize: 20)),
+            Text(soilMoisture.toStringAsFixed(2), style: const TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            const Text(
+              'Temperature',
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 10),
+            Text(temperature.toStringAsFixed(2), style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 20),
             const Text(
               'Humidity',
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 10),
-            Text(isHumidity.toString(), style: TextStyle(fontSize: 20)),
+            Text(humidity.toStringAsFixed(2), style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 20),
             const Text(
-              'Light',
+              'Pump Control',
               style: TextStyle(fontSize: 20),
             ),
-            const SizedBox(height: 10),
-            ToggleButtons(
-              children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
                 IconButton(
-                    onPressed: () => {
-                          setState(() {
-                            isLightOn = true;
-                          })
-                        },
-                    icon: const Text("On")),
+                  onPressed: () => sendCommandToESP32("TURN_ON_PUMP"),
+                  icon: const Icon(Icons.water_drop),
+                ),
                 IconButton(
-                    onPressed: () => {
-                          setState(() {
-                            isLightOn = false;
-                          })
-                        },
-                    icon: const Text("Off"))
+                  onPressed: () => sendCommandToESP32("TURN_OFF_PUMP"),
+                  icon: const Icon(Icons.water_drop_outlined),
+                ),
               ],
-              isSelected: [true, false],
             ),
-            const SizedBox(height: 20),
             const Text(
-              'Time',
+              'Light Control',
               style: TextStyle(fontSize: 20),
             ),
-            const SizedBox(height: 10),
-
-            const SizedBox(height: 20),
-            const Text(
-              'Relay',
-              style: TextStyle(fontSize: 20),
-            ),
-            ToggleButtons(
-              children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
                 IconButton(
-                    onPressed: () => {
-                          setState(() {
-                            isRelayOn = true;
-                          })
-                        },
-                    icon: const Text("On")),
+                  onPressed: () => sendCommandToESP32("TURN_ON_LIGHT"),
+                  icon: const Icon(Icons.lightbulb),
+                ),
                 IconButton(
-                    onPressed: () => {
-                          setState(() {
-                            isRelayOn = false;
-                          })
-                        },
-                    icon: const Text("Off"))
+                  onPressed: () => sendCommandToESP32("TURN_OFF_LIGHT"),
+                  icon: const Icon(Icons.lightbulb_outline),
+                ),
               ],
-              isSelected: [true, false],
             ),
-            // const ToggleButtons(children: children, isSelected: isSelected),
+            const Text(
+              'Bridge Control',
+              style: TextStyle(fontSize: 20),
+            ),
+            IconButton(
+              onPressed: () => sendCommandToESP32("TURN_BRIDGE_OFF"),
+              icon: const Icon(Icons.power_off),
+            ),
             const SizedBox(height: 10),
-            const SizedBox(height: 20),
           ],
         ),
       ),
