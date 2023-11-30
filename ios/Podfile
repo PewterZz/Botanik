@@ -1,0 +1,23 @@
+# Uncomment this line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'Runner' do
+  use_frameworks! # Required for Flutter to work with plugins.
+
+  # Pods for Flutter
+  pod 'Firebase/Auth', '~> 4.12.1'
+  pod 'Firebase/Core', '~> 2.21.0'
+  pod 'FlutterBlue', '~> 1.25.1'
+  pod 'Permission-Handler', '~> 10.0.0'
+
+  # You mentioned 'flutter_reactive_ble' as a dependency, but it doesn't have a specific version specified in your pubspec.yaml.
+  # Make sure to specify a version for it in your pubspec.yaml, and then add the corresponding pod here.
+
+  # Example: Firebase
+  # pod 'Firebase/Core'
+
+  # Example: Google Maps
+  # pod 'GoogleMaps'
+
+  # You can add more pods for additional Flutter plugins as needed.
+end
