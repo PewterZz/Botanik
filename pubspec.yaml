@@ -31,6 +31,7 @@ dependencies:
   firebase_auth: ^4.12.1
   firebase_core: ^2.21.0
   flutter_blue_plus: ^1.25.1
+  cloud_firestore: ^4.13.3
   permission_handler: any
   flutter_reactive_ble: any
   flutter:
