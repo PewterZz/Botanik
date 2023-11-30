@@ -10,7 +10,7 @@ target 'Runner' do
 
   use_frameworks!
 
-  pod 'Firebase/Auth', '~> 4.12.1'
+  pod 'FirebaseAuth'
   # Pods for Runner
   # Here you can add any additional pods you need for your project
   # pod 'SomeDependency'
