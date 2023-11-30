@@ -6,14 +6,5 @@ source 'https://github.com/CocoaPods/Specs.git'
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 target 'Runner' do
-  # Flutter Pod
 
-  use_frameworks!
-
-  pod 'FirebaseAuth'
-  # Pods for Runner
-  # Here you can add any additional pods you need for your project
-  # pod 'SomeDependency'
-
-  # Flutter dependencies
 end
