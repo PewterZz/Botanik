@@ -10,7 +10,7 @@ target 'Runner' do
   # Pods for Flutter
   pod 'Firebase/Auth', '~> 4.12.1'
   pod 'Firebase/Core', '~> 2.21.0'
-  pod 'FlutterBlue', '1.25.1'
+  pod 'flutter_blue_plus', '1.25.1'
   pod 'Permission-Handler', '~> 10.0.0'
 
   # You mentioned 'flutter_reactive_ble' as a dependency, but it doesn't have a specific version specified in your pubspec.yaml.
