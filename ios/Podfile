@@ -2,7 +2,7 @@
 platform :ios, '9.0'
 
 source 'https://github.com/CocoaPods/Specs.git'
-source 'https://pub.flutter-io.cn'
+# source 'https://pub.flutter-io.cn'
 
 target 'Runner' do
   use_frameworks! # Required for Flutter to work with plugins.
