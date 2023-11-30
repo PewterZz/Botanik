@@ -1,13 +1,16 @@
 # Uncomment this line to define a global platform for your project
 platform :ios, '9.0'
 
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://pub.flutter-io.cn'
+
 target 'Runner' do
   use_frameworks! # Required for Flutter to work with plugins.
 
   # Pods for Flutter
   pod 'Firebase/Auth', '~> 4.12.1'
   pod 'Firebase/Core', '~> 2.21.0'
-  pod 'FlutterBlue', '~> 1.25.1'
+  pod 'FlutterBlue', '1.25.1'
   pod 'Permission-Handler', '~> 10.0.0'
 
   # You mentioned 'flutter_reactive_ble' as a dependency, but it doesn't have a specific version specified in your pubspec.yaml.
