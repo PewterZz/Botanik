@@ -22,6 +22,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1.2</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Our app uses Bluetooth to connect to external devices even when you're not using the app.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Our app needs to connect to Bluetooth peripherals to function properly.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
