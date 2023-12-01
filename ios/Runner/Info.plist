@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2</string>
+	<string>1.3</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Our app uses Bluetooth to connect to external devices even when you're not using the app.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
