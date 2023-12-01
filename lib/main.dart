@@ -9,6 +9,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure that Flutter bindings are initialized
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ); // Initialize Firebase
+
+  runApp(MaterialApp(
+    home: MyApp(),
+  ));
+}
 
 class AuthChecker extends StatelessWidget {
   @override
@@ -33,19 +45,10 @@ class AuthChecker extends StatelessWidget {
   }
 }
 
-void main() async {
-  WidgetsFlutterBinding
-      .ensureInitialized(); // Ensure that Flutter bindings are initialized
-
-  await Firebase.initializeApp(); // Initialize Firebase
-
-  runApp(MaterialApp(
-    home: MyApp(),
-  ));
-}
-
 class MyApp extends StatelessWidget {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   @override
   Widget build(BuildContext context) {
